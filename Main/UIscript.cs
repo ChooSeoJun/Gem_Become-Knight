@@ -24,7 +24,6 @@ public class UIscript : MonoBehaviour
     void Update()
     {
         ShowHp();
-        Debug.Log(CharacterManager.Get_instance().Ch_Hp);
     }
 
     void ShowHp()
@@ -35,7 +34,6 @@ public class UIscript : MonoBehaviour
             {
                 img[i].gameObject.SetActive(true);
             }
-            Debug.Log(CharacterManager.Get_instance().Ch_Hp);
             if (i >= CharacterManager.Get_instance().Ch_Hp)
             {
                 img[i].gameObject.SetActive(false);

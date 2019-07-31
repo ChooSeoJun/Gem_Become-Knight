@@ -9,7 +9,7 @@ public class CharacterManager : ScriptableObject
     public int Ch_Hp = 3;
     public int Ch_Power = 0;
     public float Ch_Speed = 5f;
-
+    public int money = 0;
 
     public static CharacterManager Get_instance()
     {
