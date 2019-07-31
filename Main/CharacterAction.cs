@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class CharacterAction : MonoBehaviour
 {
-    public float Move_Speed = 10f;
 
     void Start()
     {
@@ -28,14 +27,15 @@ public class CharacterAction : MonoBehaviour
         
     }
 
-    void Move()
+    public void Move()
     {
-        float xMove = Input.GetAxisRaw("Horizontal") * Move_Speed * Time.deltaTime;
-        float yMove = Input.GetAxisRaw("Vertical") * Move_Speed * Time.deltaTime;
+        float xMove = Input.GetAxisRaw("Horizontal") *CharacterManager.Get_instance().Ch_Speed * Time.deltaTime;
+        float yMove = Input.GetAxisRaw("Vertical") * CharacterManager.Get_instance().Ch_Speed * Time.deltaTime;
         transform.position+=new Vector3(xMove,yMove);
 
         Vector2 mpos = Camera.main.ScreenToWorldPoint(Input.mousePosition)-transform.position;
 
         transform.up = mpos;
+
     }
 }
