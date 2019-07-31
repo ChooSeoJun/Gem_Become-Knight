@@ -8,6 +8,7 @@ public class CharacterAction : MonoBehaviour
     public GameObject Sword;
     
     private bool isAttacking = false;
+	bool isStun = false;
 
     void Start()
     {
@@ -16,15 +17,18 @@ public class CharacterAction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        Skill();
-        Attack();
-    }
+		if (!isStun)
+		{
+			Move();
+			Attack();
+		}
+		if (CharacterManager.Get_instance().Ch_Hp <= 0)
+		{
+			isStun = true;
+			StartCoroutine(Stun());
+		}
 
-    void Skill()
-    {
-          
-    }
+	}
 
 	bool canAttack = true;
     void Attack()
@@ -64,4 +68,11 @@ public class CharacterAction : MonoBehaviour
         transform.up = mpos;
 
     }
+
+	IEnumerator Stun()
+	{
+		yield return new WaitForSeconds(3.0f);
+		CharacterManager.Get_instance().Ch_Hp = 3;
+		isStun = false;
+	}
 }
