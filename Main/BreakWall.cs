@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BreakWall : MonoBehaviour
 {
+	public GameObject[] walls = new GameObject[4];
     // Start is called before the first frame update
     void Start()
     {
@@ -13,7 +14,13 @@ public class BreakWall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        for(int i = 0; i < 4; i++)
+		{
+			if (Wall.breakCount[i] <= 0)
+			{
+				walls[i].SetActive(false);
+			}
+		}
     }
 }
 
