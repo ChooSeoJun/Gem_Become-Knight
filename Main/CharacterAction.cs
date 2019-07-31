@@ -49,7 +49,7 @@ public class CharacterAction : MonoBehaviour
         {
 
             //Hand.transform.Rotate(new Vector3(0, 0, -15));
-            Hand.transform.rotation = Quaternion.Slerp(transform.rotation, transform.rotation, 20f);
+         
 
             Debug.Log(transform.rotation.eulerAngles.z);
            if (Hand.transform.rotation.eulerAngles.z > transform.rotation.eulerAngles.z+90)
@@ -61,7 +61,7 @@ public class CharacterAction : MonoBehaviour
             }
         }
 
-         //   Hand.transform.rotation
+  
     }
 
     public void Move()
