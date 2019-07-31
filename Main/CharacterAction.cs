@@ -11,7 +11,7 @@ public class CharacterAction : MonoBehaviour
 
     void Start()
     {
-            
+		Sword.SetActive(false);
     }
     // Update is called once per frame
     void Update()
@@ -26,50 +26,38 @@ public class CharacterAction : MonoBehaviour
           
     }
 
+	bool canAttack = true;
     void Attack()
     {
-        /*
-        Quaternion quaternion = new Quaternion();
+		if (canAttack && Input.GetMouseButtonDown(0))
+		{
+			canAttack = false;
+			StartCoroutine(attack());
+		}
+		//else if(canAttack) Hand.transform.rotation = Quaternion.Euler(0, 0, transform.rotation.z); 
+	}
 
-
-        if (Input.GetMouseButton(0))
-        {
-            Sword.SetActive(true);
-            Hand.transform.rotation = quaternion;
-          //  Sword.SetActive(false);
-        }
-        */
-
-        if (Input.GetMouseButton(0) && !isAttacking)
-        {
-            isAttacking = true;
-        }
-
-        if (isAttacking)
-        {
-
-            //Hand.transform.Rotate(new Vector3(0, 0, -15));
-         
-
-            Debug.Log(transform.rotation.eulerAngles.z);
-           if (Hand.transform.rotation.eulerAngles.z > transform.rotation.eulerAngles.z+90)
-            {
-                Debug.Log("ddd");
-                Hand.transform.rotation = Quaternion.Euler(0, 0, 90);
-                //Hand.transform.Rotate(0, 0, 90);
-                isAttacking = false;
-            }
-        }
-
-  
-    }
+	IEnumerator attack()
+	{
+		Sword.SetActive(true);
+		for (int i = 1; i <= 12; i++)
+		{
+			//Hand.transform.rotation += Quaternion.Euler(0, 0, 1);// new Vector3(0, 0, i);
+			Hand.transform.eulerAngles += new Vector3(0, 0, 15);
+			yield return new WaitForSeconds(0.005f);
+		}
+		yield return new WaitForSeconds(0.05f);
+		Hand.transform.eulerAngles += new Vector3(0, 0, -180);
+		Sword.SetActive(false);
+		canAttack = true;
+	}
 
     public void Move()
     {
         float xMove = Input.GetAxisRaw("Horizontal") *CharacterManager.Get_instance().Ch_Speed * Time.deltaTime;
         float yMove = Input.GetAxisRaw("Vertical") * CharacterManager.Get_instance().Ch_Speed * Time.deltaTime;
         transform.position+=new Vector3(xMove,yMove);
-        Hand.transform.position = transform.position;
+        
         
        Vector2 mpos = Camera.main.ScreenToWorldPoint(Input.mousePosition)-transform.position;
 
