@@ -8,7 +8,7 @@ public class MonsterActions : MonoBehaviour
 	float moveSpeed = 3.0f;
 	int door;
 	public GameObject gem;
-
+    int MonHp = 10;
 	bool moveDoor;
 
 	// Start is called before the first frame update
@@ -42,13 +42,13 @@ public class MonsterActions : MonoBehaviour
 
 			transform.Translate(new Vector2(xPos, yPos));
 		}*/
-
+        
 		
 
 
 	}
 
-
+    bool co = true;
     // Update is called once per frame
     void Update()
     {
@@ -57,32 +57,61 @@ public class MonsterActions : MonoBehaviour
 			transform.position = Vector3.MoveTowards(transform.position, new Vector3(posDoor[door, 0], posDoor[door, 1], 0), moveSpeed * Time.deltaTime);
 		else
 		{
-			if (Wall.breakCount[door] > 0)
-			{
-				StartCoroutine(AttackWall());
-			}
-			else
-			{
-				if(Vector2.Distance(transform.position, new Vector2(PLAYER.x, PLAYER.y)) <= 9)
-				{
-					transform.position = Vector3.MoveTowards(transform.position, new Vector2(PLAYER.x,PLAYER.y), moveSpeed * Time.deltaTime);
-				}
-				else
-					transform.position = Vector3.MoveTowards(transform.position, new Vector2(GEM.gemX, GEM.gemY), moveSpeed * Time.deltaTime);
-			}
+            if (co)
+            {
+                if (Wall.breakCount[door] > 0)
+                {
+                    StartCoroutine(AttackWall());
+                }
+                else
+                {
+                    if (Vector2.Distance(transform.position, new Vector2(PLAYER.x, PLAYER.y)) <= 9)
+                    {
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector2(PLAYER.x, PLAYER.y), moveSpeed * Time.deltaTime);
+                    }
+                    else
+                        transform.position = Vector3.MoveTowards(transform.position, new Vector2(GEM.gemX, GEM.gemY), moveSpeed * Time.deltaTime);
+                }
+            }
 		}
 	}
+   
+    
 
-	IEnumerator Attack()
-	{
-		//애니메이션
-		//플레이어 체력 깎기
-		yield return new WaitForSeconds(1.0f);
-	}
 	IEnumerator AttackWall()
 	{
+        co = false;
+
 		Wall.breakCount[door]--;
 		//애니메이션
 		yield return new WaitForSeconds(1.0f);
+
+        co = true;
 	}
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        if (collision.transform.tag == "Player")
+        {
+            CharacterManager.Get_instance().Ch_Hp -= 1;
+            Debug.Log("플레이어 아프다");
+            Debug.Log(CharacterManager.Get_instance().Ch_Hp);
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "Sword")
+        {
+            Debug.Log("몬스터 아프다");
+            Debug.Log(MonHp);
+            MonHp -= CharacterManager.Get_instance().Ch_Power;
+            if(MonHp < 0)
+            {
+                Destroy(gameObject);
+                CharacterManager.Get_instance().liveMon -=1;
+                Debug.Log(CharacterManager.Get_instance().liveMon);
+            }
+        }
+    }
 }
